@@ -56,7 +56,10 @@
                                             @csrf
 											<div class="col-12">
 												<label for="inputEmailAddress" class="form-label">Email/Name/Phone</label>
-												<input type="text" class="form-control" name="login" id="login" placeholder="jhon@example.com">
+												<input type="text" class="form-control" name="login" id="login" @error('login') is-invalid @enderror placeholder="jhon@example.com">
+												@error('login')
+													<span class="text-danger">{{ $message }}</span>
+												@enderror
 											</div>
 											<div class="col-12">
 												<label for="inputChoosePassword" class="form-label">Password</label>
