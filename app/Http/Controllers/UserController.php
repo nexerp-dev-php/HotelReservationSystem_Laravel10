@@ -19,4 +19,31 @@ class UserController extends Controller
 
         return view('frontend.dashboard.edit_profile', compact('profileData'));
     }
+
+    public function UserStore(Request $request) {
+        $id = Auth::user()->id;
+        $data = User::find($id);
+
+        $data->name = $request->name;
+        $data->email = $request->email;
+        $data->phone = $request->phone;
+        $data->address = $request->address;
+
+        if($request->file('photo')) {
+            $file = $request->file('photo'); //get the uploaded file
+            @unlink(public_path('upload/user_images/'.$data->photo));//To remove existing image
+            $filename = date('YmdHi').$file->getClientOriginalName();
+            $file->move(public_path('upload/user_images'), $filename);
+            $data['photo'] = $filename;
+        }
+
+        $data->save();
+
+        $notification = array(
+            'message' => 'User Profile Updated Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->back()->with($notification);
+    }     
 }

@@ -37,7 +37,8 @@
  
             <section class="checkout-area pb-70">
             <div class="container">
-                <form>
+                <form action="{{ route('profile.store') }}" method="post" enctype="multipart/form-data">
+                    @csrf
                     <div class="row">
                         <div class="col-lg-12 col-md-12">
                             <div class="billing-details">
@@ -72,30 +73,28 @@
                                             <input type="text" class="form-control" name="phone" value="{{ $profileData->phone }}">
                                         </div>
                                     </div>
-
-
- 
- <div class="col-lg-12 col-md-6">
-        <div class="form-group">
-            <label>Photo  <span class="required">*</span></label>
-            <input type="file" class="form-control" name="photo" id="image">
-        </div>
-    </div>
- <div class="col-lg-12 col-md-6">
-        <div class="form-group">
-            <img id="showImage" src="{{ (!empty($profileData->photo)) ? url('upload/admin_images/',$profileData->photo) : url('upload/no_image.jpg') }}" alt="Admin" class="rounded-circle p-1 bg-primary" width="80">
-        </div>
-    </div>
-
- <button type="submit" class="btn btn-danger">Save Changes </button>
-</div>
-</div>
-</div>
-</div>
-</form>      
+                                    <div class="col-lg-12 col-md-6">
+                                        <div class="form-group">
+                                            <label>Photo  <span class="required">*</span></label>
+                                            <input type="file" class="form-control" name="photo" id="image">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-6">
+                                        <div class="form-group">
+                                            <img id="showImage" src="{{ (!empty($profileData->photo)) ? url('upload/user_images/',$profileData->photo) : url('upload/no_image.jpg') }}" alt="Admin" class="rounded-circle p-1 bg-primary" width="80">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">                                
+                                    <button type="submit" class="btn btn-danger">Save Changes </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>      
                 
             </div>
-        </section>
+            </section>
                             
                         </div>
                     </div>
