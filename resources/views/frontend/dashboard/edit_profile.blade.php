@@ -1,6 +1,9 @@
 @extends('frontend.main_master')
 @section('main')
-
+<script
+  src="https://code.jquery.com/jquery-3.7.1.js"
+  integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+  crossorigin="anonymous"></script>
 
         <!-- Inner Banner -->
         <div class="inner-banner inner-bg6">
@@ -44,38 +47,29 @@
                                    
                                     <div class="col-lg-6 col-md-6">
                                         <div class="form-group">
-                                            <label>First Name <span class="required">*</span></label>
-                                            <input type="text" class="form-control">
+                                            <label>Name <span class="required">*</span></label>
+                                            <input type="text" class="form-control" name="name" value="{{ $profileData->name }}">
                                         </div>
                                     </div>
 
                                     <div class="col-lg-6 col-md-6">
                                         <div class="form-group">
-                                            <label>Last Name <span class="required">*</span></label>
-                                            <input type="text" class="form-control">
+                                            <label>Email <span class="required">*</span></label>
+                                            <input type="email" class="form-control" name="email" value="{{ $profileData->email }}">
                                         </div>
                                     </div>
-
-                                    <div class="col-lg-12 col-md-12">
-                                        <div class="form-group">
-                                            <label>Company Name</label>
-                                            <input type="text" class="form-control">
-                                        </div>
-                                    </div>
-
-                                   
 
                                     <div class="col-lg-6 col-md-6">
                                         <div class="form-group">
-                                            <label>Email Address <span class="required">*</span></label>
-                                            <input type="email" class="form-control">
+                                            <label>Address <span class="required">*</span></label>
+                                            <input type="text" class="form-control" name="address" value="{{ $profileData->address }}">
                                         </div>
                                     </div>
 
                                     <div class="col-lg-6 col-md-6">
                                         <div class="form-group">
                                             <label>Phone <span class="required">*</span></label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" class="form-control" name="phone" value="{{ $profileData->phone }}">
                                         </div>
                                     </div>
 
@@ -83,18 +77,16 @@
  
  <div class="col-lg-12 col-md-6">
         <div class="form-group">
-            <label>User Profile  <span class="required">*</span></label>
-            <input type="file" class="form-control">
+            <label>Photo  <span class="required">*</span></label>
+            <input type="file" class="form-control" name="photo" id="image">
+        </div>
+    </div>
+ <div class="col-lg-12 col-md-6">
+        <div class="form-group">
+            <img id="showImage" src="{{ (!empty($profileData->photo)) ? url('upload/admin_images/',$profileData->photo) : url('upload/no_image.jpg') }}" alt="Admin" class="rounded-circle p-1 bg-primary" width="80">
         </div>
     </div>
 
-    <div class="col-lg-12 col-md-6">
-        <div class="form-group">
-            <label>Town / City <span class="required">*</span></label>
-            <input type="text" class="form-control">
-        </div>
-    </div>
- 
  <button type="submit" class="btn btn-danger">Save Changes </button>
 </div>
 </div>
@@ -114,5 +106,15 @@
         </div>
         <!-- Service Details Area End -->
 
-
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#image').change(function(e) {
+		var reader = new FileReader();
+		reader.onload = function(e) {
+			$('#showImage').attr('src', e.target.result);
+		}
+		reader.readAsDataURL(e.target.files[0]);
+	});
+});
+</script>
 @endsection
