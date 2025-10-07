@@ -1,3 +1,11 @@
+docker-compose down
+
+php artisan optimize
+
+docker-compose build
+
+docker-compose up -d
+
 docker exec -it laravel10-app php artisan key:generate
 docker exec -it laravel10-app php artisan migrate
 
