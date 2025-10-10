@@ -56,4 +56,58 @@ class TeamController extends Controller
 
         return redirect()->route('all.team')->with($notification);
     }     
+
+    public function EditTeam($id) {
+        $team = Team::findOrFail($id);
+
+        return view('backend.team.edit_team', compact('team'));
+    }
+
+   public function StoreUpdatedTeam(Request $request) {
+        $team_id = $request->id;
+        
+        if($request->file('image')) {
+            //Version 3
+            $image = $request->file('image');
+            $name_gen = hexdec(uniqid()).'.'.$image->getClientOriginalExtension();
+
+            $manager = new ImageManager(new Driver());
+            $image2 = $manager->read($image);
+            $image2->resize(550, 670);
+            $image2->save(public_path('upload/team/').$name_gen);
+
+            $save_url = 'upload/team/'.$name_gen;
+
+            Team::findOrFail($team_id)->update([
+                'name' => $request->name,
+                'position' => $request->position,
+                'facebook' => $request->facebook,
+                'image' => $save_url,
+                'updated_at' => Carbon::now()                
+            ]);
+
+            $notification = array(
+                'message' => 'Team Profile updated Successfully',
+                'alert-type' => 'success'
+            );
+
+            return redirect()->route('all.team')->with($notification);            
+        } else {
+            Team::findOrFail($team_id)->update([
+                'name' => $request->name,
+                'position' => $request->position,
+                'facebook' => $request->facebook,
+                'updated_at' => Carbon::now()                
+            ]);
+
+            $notification = array(
+                'message' => 'Team Profile updated Successfully',
+                'alert-type' => 'success'
+            );
+
+            return redirect()->route('all.team')->with($notification);             
+        }
+
+
+    }     
 }
