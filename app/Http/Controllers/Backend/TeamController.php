@@ -13,4 +13,8 @@ class TeamController extends Controller
 
         return view('backend.team.all_team', compact('team'));
     }
+
+    public function AddTeam() {
+        return view('backend.team.add_team');
+    }      
 }

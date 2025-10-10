@@ -54,5 +54,6 @@ Route::middleware(['auth', 'roles:admin'])->group(function() {
     //Using grouping method to handle the controller and routes
     Route::controller(TeamController::class)->group(function() {
         Route::get('/all/team', 'AllTeam')->name('all.team');
+        Route::get('/add/team', 'AddTeam')->name('add.team');
     });
 });
