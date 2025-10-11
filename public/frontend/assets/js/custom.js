@@ -31,7 +31,7 @@
     
     // Services Slider 
     $('.services-slider').owlCarousel({
-        loop: true,
+        loop: false,
         margin: 30,
         nav: true,
         dots: false,
@@ -56,7 +56,7 @@
 
     // Room Slider 
     $('.room-slider').owlCarousel({
-        loop: true,
+        loop: false,
         margin: 30,
         nav: false,
         dots: true,
@@ -77,7 +77,7 @@
 
     // Testimonials Slider 
     $('.testimonials-slider').owlCarousel({
-        loop: true,
+        loop: false,
         margin: 30,
         nav: true,
         dots: false,
@@ -103,7 +103,7 @@
     
     // Testimonials Slider Two
     $('.testimonials-slider-two').owlCarousel({
-        loop: true,
+        loop: false,
         items: 1,
         margin: 30,
         nav: false,
@@ -114,7 +114,7 @@
 
     // Testimonials Slider Three
     $('.testimonials-slider-three').owlCarousel({
-        loop: true,
+        loop: false,
         margin: 30,
         nav: false,
         dots: true,
@@ -135,7 +135,7 @@
 
     // Testimonials Slider Area
     $('.testimonials-slider-area').owlCarousel({
-        loop: true,
+        loop: false,
         items: 1,
         margin: 30,
         nav: false,
@@ -146,7 +146,7 @@
 
     // Team Slider 
     $('.team-slider').owlCarousel({
-        loop: true,
+        loop: false,
         margin: 30,
         nav: true,
         dots: false,
@@ -171,7 +171,7 @@
    
     // Team Slider Two
     $('.team-slider-two').owlCarousel({
-        loop: true,
+        loop: false,
         margin: 30,
         nav: false,
         dots: true,
@@ -192,7 +192,7 @@
 
     // Room Details Slider 
     $('.room-details-slider').owlCarousel({
-        loop: true,
+        loop: false,
         margin: 30,
         items: 1,
         nav: true,
