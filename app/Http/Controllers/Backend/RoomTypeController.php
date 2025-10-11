@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\RoomType;
 use App\Models\Room;
+use App\Models\RoomNumber;
+use App\Models\Facility;
+use App\Models\MultiImage;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use Carbon\Carbon;
@@ -64,8 +67,37 @@ class RoomTypeController extends Controller
     }     
 
     public function DeleteRoomtype($id) {
-        $roomtype = RoomType::findOrFail($id)->delete();
- 
+        $roomtype = RoomType::findOrFail($id);
+        
+        $room = Room::where('roomtype_id', $roomtype->id)->get();
+        foreach($room as $item) {
+            $img = $item->image;
+            if(!empty($img)) {
+                if(file_exists('upload/room/'.$img)) {
+                    unlink('upload/room/'.$img);
+                }
+            }
+
+            Facility::where('room_id', $item->id)->delete();
+
+            $uploadedImages = MultiImage::where('room_id', $item->id)->get()->toArray();
+            if(!empty($uploadedImages)) {
+                foreach($uploadedImages as $image) {
+                    if(file_exists('upload/room/'.$image['multi_img'])) {
+                        unlink('upload/room/'.$image['multi_img']);
+                    }
+                }
+            }  
+            
+            MultiImage::where('room_id', $item->id)->delete();
+
+            $item->delete();
+        }
+        
+        RoomNumber::where('roomtype_id', $roomtype->id)->delete();
+
+        RoomType::findOrFail($id)->delete();
+
         $notification = array(
             'message' => 'Room Type deleted Successfully',
             'alert-type' => 'success'
