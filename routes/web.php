@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Backend\TeamController;
+use App\Http\Controllers\Backend\BookAreaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,5 +60,18 @@ Route::middleware(['auth', 'roles:admin'])->group(function() {
         Route::get('/edit/team/{id}', 'EditTeam')->name('edit.team');
         Route::post('/team/update/store', 'StoreUpdatedTeam')->name('team.update.store');
         Route::get('/delete/team/{id}', 'DeleteTeam')->name('delete.team');
+    });
+});
+
+//Admin group middleware
+Route::middleware(['auth', 'roles:admin'])->group(function() {
+    //Using grouping method to handle the controller and routes
+    Route::controller(BookAreaController::class)->group(function() {
+        Route::get('/all/bookarea', 'AllBookArea')->name('all.book.area');
+        Route::get('/add/bookarea', 'AddBookArea')->name('add.book.area');
+        Route::post('/bookarea/store', 'StoreBookarea')->name('book.area.store');
+        Route::get('/edit/bookarea/{id}', 'EditBookarea')->name('edit.book.area');
+        Route::post('/bookarea/update/store', 'StoreUpdatedBookarea')->name('bookarea.update.store');
+        Route::get('/delete/bookarea/{id}', 'DeleteBookarea')->name('delete.book.area');
     });
 });

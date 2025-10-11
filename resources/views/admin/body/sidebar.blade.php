@@ -31,6 +31,19 @@
 						</li>
 					</ul>
 				</li>
+				<li>
+					<a href="javascript:;" class="has-arrow">
+						<div class="parent-icon"><i class="bx bx-category"></i>
+						</div>
+						<div class="menu-title">Manage BookArea</div>
+					</a>
+					<ul>
+						<li> <a href="{{ route('all.book.area') }}"><i class='bx bx-radio-circle'></i>All BookArea</a>
+						</li>
+						<li> <a href="{{ route('add.book.area') }}"><i class='bx bx-radio-circle'></i>Add BookArea</a>
+						</li>
+					</ul>
+				</li>				
 				<li class="menu-label">UI Elements</li>
 				<li>
 					<a href="widgets.html">
