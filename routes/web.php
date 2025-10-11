@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Backend\TeamController;
 use App\Http\Controllers\Backend\BookAreaController;
+use App\Http\Controllers\Backend\RoomTypeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,5 +74,18 @@ Route::middleware(['auth', 'roles:admin'])->group(function() {
         Route::get('/edit/bookarea/{id}', 'EditBookarea')->name('edit.book.area');
         Route::post('/bookarea/update/store', 'StoreUpdatedBookarea')->name('bookarea.update.store');
         Route::get('/delete/bookarea/{id}', 'DeleteBookarea')->name('delete.book.area');
+    });
+});
+
+//Admin group middleware
+Route::middleware(['auth', 'roles:admin'])->group(function() {
+    //Using grouping method to handle the controller and routes
+    Route::controller(RoomTypeController::class)->group(function() {
+        Route::get('/all/roomtype', 'AllRoomType')->name('all.room.type');
+        Route::get('/add/roomtype', 'AddRoomType')->name('add.room.type');
+        Route::post('/roomtype/store', 'StoreRoomType')->name('room.type.store');
+        Route::get('/edit/roomtype/{id}', 'EditRoomType')->name('edit.room.type');
+        Route::post('/roomtype/update/store', 'StoreUpdatedRoomtype')->name('roomtype.update.store');
+        Route::get('/delete/roomtype/{id}', 'DeleteRoomtype')->name('delete.room.type');        
     });
 });
