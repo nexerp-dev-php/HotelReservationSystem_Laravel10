@@ -60,6 +60,12 @@ class BookAreaController extends Controller
         $id = $request->id;
         
         if($request->file('image')) {
+            $bookarea = BookArea::findOrFail($id);
+            $img = $bookarea->image;
+            if(file_exists($img)) {
+                unlink($img);
+            }
+                        
             //Version 3
             $image = $request->file('image');
             $name_gen = hexdec(uniqid()).'.'.$image->getClientOriginalExtension();
