@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Room;
 use App\Models\Facility;
 use App\Models\MultiImage;
+use App\Models\RoomNumber;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use Carbon\Carbon;
@@ -17,8 +18,9 @@ class RoomController extends Controller
         $room = Room::findOrFail($id);
         $basic_facility = Facility::where('room_id', $id)->get();
         $gallery_images = MultiImage::where('room_id', $id)->get();
+        $roomNumbers = RoomNumber::where('room_id', $id)->get();
 
-        return view('backend.room.edit_room', compact('room', 'basic_facility', 'gallery_images'));
+        return view('backend.room.edit_room', compact('room', 'basic_facility', 'gallery_images', 'roomNumbers'));
     }
 
     public function StoreUpdatedRoom(Request $request, $id) {
@@ -135,5 +137,55 @@ class RoomController extends Controller
         );
 
         return redirect()->route('all.room.type')->with($notification);             
+    }
+
+    public function StoreRoomNumber(Request $request, $id) {
+        $roomNumber = new RoomNumber();
+        $roomNumber->room_id = $id;
+        $roomNumber->roomtype_id = $request->roomtype_id;
+        $roomNumber->room_no = $request->room_no;
+        $roomNumber->status = $request->status;
+        $roomNumber->created_at = Carbon::now();
+
+        $roomNumber->save();
+
+        $notification = array(
+            'message' => 'Room Number created Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->back()->with($notification);             
+    }
+
+    public function DeleteRoomNumber($id) {
+        RoomNumber::where('id', $id)->delete();
+
+        $notification = array(
+            'message' => 'Room Number deleted Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->back()->with($notification); 
+    }
+
+    public function EditRoomNumber($id) {
+        $roomNumber = RoomNumber::findOrFail($id);
+
+        return view('backend.room.edit_room_number', compact('roomNumber'));
+    }
+
+    public function StoreUpdatedRoomNumber(Request $request) {
+        $roomNumber = RoomNumber::findOrFail($request->id);
+        $roomNumber->room_no = $request->room_no;
+        $roomNumber->status = $request->status;
+
+        $roomNumber->save();
+
+        $notification = array(
+            'message' => 'Room Number updated Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->route('all.room.type')->with($notification);         
     }
 }

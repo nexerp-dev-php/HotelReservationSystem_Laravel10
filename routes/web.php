@@ -98,5 +98,9 @@ Route::middleware(['auth', 'roles:admin'])->group(function() {
         Route::get('/edit/room/{id}', 'EditRoom')->name('edit.room');
         Route::post('/room/update/{id}', 'StoreUpdatedRoom')->name('room.store');  
         Route::get('/delete/room/gallery/{id}', 'DeleteRoomGalleryImage')->name('delete.room.gallery.image');  
+        Route::post('/room/no/store/{id}', 'StoreRoomNumber')->name('room.number.store');
+        Route::get('/edit/room/no/{id}', 'EditRoomNumber')->name('edit.room.number');
+        Route::post('/room/no/update/store', 'StoreUpdatedRoomNumber')->name('room.number.update.store');
+        Route::get('/delete/room/no/{id}', 'DeleteRoomNumber')->name('delete.room.number');
     });
 });

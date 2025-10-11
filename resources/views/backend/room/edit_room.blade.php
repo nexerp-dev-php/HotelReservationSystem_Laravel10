@@ -102,7 +102,7 @@
                                                     </div> 
                                                     
                                                     <div class="col-md-6">
-                                                        <label for="input7" class="form-label">Room View {{$room->view}}</label>
+                                                        <label for="input7" class="form-label">Room View</label>
                                                         <select name="view" id="view" class="form-select">
                                                             <option selected="">Choose...</option>
                                                             <option value="Sea View" {{$room->view == 'Sea View'?'selected':''}}>Sea View</option>
@@ -110,7 +110,7 @@
                                                         </select>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label for="input7" class="form-label">Bed Style {{$room->bed_type}}</label>
+                                                        <label for="input7" class="form-label">Bed Style</label>
                                                         <select name="bed_type" id="bed_type" class="form-select">
                                                             <option selected="">Choose...</option>
                                                             <option value="Queen Bed" {{$room->bed_type == 'Queen Bed'?'selected':''}}>Queen Bed</option>
@@ -233,9 +233,71 @@
                                         </div>
 
 
+
+
+
+
+
 									</div>
 									<div class="tab-pane fade" id="primaryprofile" role="tabpanel">
-										<p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</p>
+
+
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <form action="{{ route('room.number.store', $room->id) }}" method="post">
+                                                    @csrf
+                                                    <input type="hidden" name="roomtype_id" value="{{ $room->roomtype_id }}"/>
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <label for="input1" class="form-label">Room No</label>
+                                                            <input type="text" class="form-control" name="room_no" id="room_no">
+                                                        </div> 
+                                                            
+                                                        <div class="col-md-4">
+                                                            <label for="input7" class="form-label">Status</label>
+                                                            <select name="status" id="status" class="form-select">
+                                                                <option selected="">Select status...</option>
+                                                                <option value="Active">Active</option>
+                                                                <option value="Inactive">Inactive</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="col-md-4">
+                                                            <button type="submit" class="btn btn-success" style="margin-top:28px;">Save</button>
+                                                        </div>                                                             
+                                                    </div>
+                                                </form>
+                                            </div>                                                
+                                        </div>                                                
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <table class="table mb-0 table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Room No#</th>
+                                                            <th scope="col">Status</th>
+                                                            <th scope="col">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach($roomNumbers as $item)
+                                                        <tr>
+                                                            <th scope="row">{{ $item->room_no }}</th>
+                                                            <td>{{ $item->status }}</td>
+                                                            <td>
+                                                                <a href="{{ route('edit.room.number', $item->id) }}" class="btn btn-warning px-3 radius-30">Edit</a>
+                                                                <a href="{{ route('delete.room.number', $item->id) }}" class="btn btn-danger px-3 radius-30" id="delete">Delete</a>                                                                
+                                                            </td>
+                                                        </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+
+
+
 									</div>
 								</div>
 							</div>
