@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\RoomType;
+use App\Models\Room;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use Carbon\Carbon;
@@ -22,8 +23,13 @@ class RoomTypeController extends Controller
     }
     
     public function StoreRoomType(Request $request) {
-        RoomType::insert([
+        $roomtype_id = RoomType::insertGetId([
             'name' => $request->name,
+            'created_at' => Carbon::now()
+        ]);
+
+        Room::insert([
+            'roomtype_id' => $roomtype_id,
             'created_at' => Carbon::now()
         ]);
 

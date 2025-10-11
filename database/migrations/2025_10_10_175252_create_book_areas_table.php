@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('book_areas', function (Blueprint $table) {
             $table->id();
-            $table->string('image')->nullable;
-            $table->string('short_title')->nullable;
-            $table->string('main_title')->nullable;
-            $table->text('short_desc')->nullable;
-            $table->string('link_url')->nullable;
+            $table->string('image')->nullable();
+            $table->string('short_title')->nullable();
+            $table->string('main_title')->nullable();
+            $table->text('short_desc')->nullable();
+            $table->string('link_url')->nullable();
             $table->timestamps();
         });
     }

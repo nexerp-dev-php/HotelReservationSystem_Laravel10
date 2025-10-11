@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Backend\TeamController;
 use App\Http\Controllers\Backend\BookAreaController;
 use App\Http\Controllers\Backend\RoomTypeController;
+use App\Http\Controllers\Backend\RoomController;
 
 /*
 |--------------------------------------------------------------------------
@@ -87,5 +88,15 @@ Route::middleware(['auth', 'roles:admin'])->group(function() {
         Route::get('/edit/roomtype/{id}', 'EditRoomType')->name('edit.room.type');
         Route::post('/roomtype/update/store', 'StoreUpdatedRoomtype')->name('roomtype.update.store');
         Route::get('/delete/roomtype/{id}', 'DeleteRoomtype')->name('delete.room.type');        
+    });
+});
+
+//Admin group middleware
+Route::middleware(['auth', 'roles:admin'])->group(function() {
+    //Using grouping method to handle the controller and routes
+    Route::controller(RoomController::class)->group(function() {
+        Route::get('/edit/room/{id}', 'EditRoom')->name('edit.room');
+        Route::post('/room/update/{id}', 'StoreUpdatedRoom')->name('room.store');  
+        Route::get('/delete/room/gallery/{id}', 'DeleteRoomGalleryImage')->name('delete.room.gallery.image');  
     });
 });

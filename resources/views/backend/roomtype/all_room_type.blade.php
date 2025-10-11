@@ -36,18 +36,24 @@
 								<thead>
 									<tr>
 										<th>No#</th>
+										<th>Image</th>
 										<th>Name</th>
 										<th>Action</th>
 									</tr>
 								</thead>
 								<tbody>
 									@foreach($roomtypes as $key=> $item)
+									@php
+										$room = App\models\Room::where('roomtype_id', $item->id)
+									@endphp
 									<tr>
 										<td>{{ $key+1 }}</td>
+										<td><img src="{{ (!empty($item->room->image)) ? url('upload/room/'.$item->room->image) : url('upload/no_image.jpg') }}" width="100" height="80"></td>
 										<td>{{ $item->name }}</td>
 										<td>
 											<a href="{{ route('edit.room.type', $item->id) }}" class="btn btn-warning px-3 radius-30">Edit</a>
-											<a href="{{ route('delete.room.type', $item->id) }}" class="btn btn-danger px-3 radius-30" id="delete">Delete</a>
+											<a href="{{ route('delete.room.type', $item->id) }}" class="btn btn-danger px-3 radius-30" id="delete">Delete</a> | 
+											<a href="{{ route('edit.room', $item->room->id) }}" class="btn btn-success px-3 radius-30">Edit Room Info</a>
 										</td>
 									</tr>
 									@endforeach
