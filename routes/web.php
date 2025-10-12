@@ -8,7 +8,7 @@ use App\Http\Controllers\Backend\TeamController;
 use App\Http\Controllers\Backend\BookAreaController;
 use App\Http\Controllers\Backend\RoomTypeController;
 use App\Http\Controllers\Backend\RoomController;
-
+use App\Http\Controllers\Frontend\FrontEndRoomController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -103,4 +103,11 @@ Route::middleware(['auth', 'roles:admin'])->group(function() {
         Route::post('/room/no/update/store', 'StoreUpdatedRoomNumber')->name('room.number.update.store');
         Route::get('/delete/room/no/{id}', 'DeleteRoomNumber')->name('delete.room.number');
     });
+});
+
+//Public pages routes
+//Using grouping method to handle the controller and routes
+Route::controller(FrontEndRoomController::class)->group(function() {
+    Route::get('/list/rooms', 'ListAllRoom')->name('list.all.rooms');
+    Route::get('/show/room/{id}', 'ShowRoom')->name('show.room');
 });
