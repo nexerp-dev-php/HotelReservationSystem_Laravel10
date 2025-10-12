@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('discount')->default(0);
             $table->string('short_desc')->nullable();
             $table->text('description')->nullable();
-            $table->string('status')->default(0);
+            $table->string('status')->default(1);
             $table->timestamps();
         });
     }
