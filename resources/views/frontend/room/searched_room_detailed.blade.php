@@ -365,12 +365,10 @@
 
 
     function getAvaility(check_in, check_out, room_id) {
-        alert('asdasd');
        $.ajax({
           url: "{{ route('check.room.availability') }}",
           data: {room_id:room_id, check_in:check_in, check_out:check_out},
           success: function(data){
-            alert(data);
              $(".available_room").html('Availability : <span class="text-success">'+data['available_room']+' Rooms</span>');
              $("#available_room").val(data['available_room']);
              price_calculate(data['total_nights']);
