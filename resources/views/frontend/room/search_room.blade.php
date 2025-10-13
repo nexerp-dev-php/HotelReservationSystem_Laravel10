@@ -44,11 +44,11 @@
                     @if($remaining_room > 0 && old('person') <= $room->total_adult)
                     <div class="col-lg-6 col-md-6">
                         <div class="room-card">
-                            <a href="{{ route('show.room', $room->id) }}">
+                            <a href="{{ route('search.room.details', ['id' => $room->id, 'check_in' => old('check_in'), 'check_out' => old('check_out'), 'person' => old('person')]) }}">
                                 <img src="{{asset('upload/room/'.$room->image)}}" alt="Images" style="width:100%;height:450px;">
                             </a>
                             <div class="content">
-                                <h3><a href="{{ route('show.room', $room->id) }}">{{ $room->type->name }}</a></h3>
+                                <h3><a href="{{ route('search.room.details', ['id' => $room->id, 'check_in' => old('check_in'), 'check_out' => old('check_out'), 'person' => old('person')]) }}">{{ $room->type->name }}</a></h3>
                                 <ul>
                                     <li class="text-color">{{ $room->price }}</li>
                                     <li class="text-color">Per Night</li>

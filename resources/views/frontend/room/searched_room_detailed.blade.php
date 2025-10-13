@@ -1,0 +1,414 @@
+@extends('frontend.main_master')
+@section('main')
+
+
+<script
+  src="https://code.jquery.com/jquery-3.7.1.js"
+  integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+  crossorigin="anonymous"></script>
+
+
+        <!-- Inner Banner -->
+        <div class="inner-banner inner-bg10">
+            <div class="container">
+                <div class="inner-title">
+                    <ul>
+                        <li>
+                            <a href="index.html">Home</a>
+                        </li>
+                        <li><i class='bx bx-chevron-right'></i></li>
+                        <li>Room Details </li>
+                    </ul>
+                    <h3>{{ $room->type->name }}</h3>
+                </div>
+            </div>
+        </div>
+        <!-- Inner Banner End -->
+
+        <!-- Room Details Area End -->
+        <div class="room-details-area pt-100 pb-70">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="room-details-side">
+                            <div class="side-bar-form">
+                                <h3>Booking Sheet </h3>
+                                <form id="bk_form" action="" method="post">
+                                    @csrf
+                                    <input type="hidden" name="room_id" value="{{ $room->id }}"/>
+                                    <div class="row align-items-center">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Check in</label>
+                                                <div class="input-group">
+                                                    <input autocomplete="off" name="check_in" id="check_in" class="form-control dt_picker" type="text" value="{{$check_in}}" placeholder="yyy-mm-dd" required>
+                                                    <span class="input-group-addon"></span>
+                                                </div>
+                                                <i class='bx bxs-calendar'></i>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Check Out</label>
+                                                <div class="input-group">
+                                                    <input autocomplete="off" name="check_out" id="check_out" class="form-control dt_picker" type="text" value="{{$check_out}}" placeholder="yyy-mm-dd" required>
+                                                    <span class="input-group-addon"></span>
+                                                </div>
+                                                <i class='bx bxs-calendar'></i>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Numbers of Persons</label>
+                                                <select name="person" id="person" class="form-control">
+                                                    <option @selected($person == '01')>01</option>
+                                                    <option @selected($person == '02')>02</option>
+                                                    <option @selected($person == '03')>03</option>
+                                                    <option @selected($person == '04')>04</option>
+                                                    <option @selected($person == '05')>05</option>
+                                                </select>	
+                                            </div>
+                                        </div>
+
+                                        <input type="hidden" id="total_adult" value="{{ $room->total_adult }}" />
+                                        <input type="hidden" id="room_price" value="{{ $room->price }}" />
+                                        <input type="hidden" id="discount_rate" value="{{ $room->discount }}" />
+
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Numbers of Rooms</label>
+                                                    @php
+                                                        $bookings = App\Models\Booking::withCount('assign_rooms')->whereIn('id', $check_date_booking_ids)->where('room_id', $id)->get()->toArray();
+
+                                                        $total_booked_room = array_sum(array_column($bookings, 'assign_rooms'));
+
+                                                        $remaining_room = count($room->room_numbers) - $total_booked_room;
+                                                    @endphp                                      
+                                                <select name="number_of_rooms" id="select_room" class="form-control number_of_rooms" {{$remaining_room == 0?'disabled' :''}}>                                                   
+                                                    @for($i = 1; $i <= $remaining_room; $i++)
+                                                        <option value="0{{ $i }}">0{{ $i }}</option>
+                                                    @endfor
+                                                </select>	
+                                            </div>
+                                            <input type="hidden" name="available_room" id="available_room"/>
+                                            <p class="available_room"></p>
+                                        </div>
+
+                                        <div class="col-lg-12">
+                                            <table class="table">
+                                                <tbody>
+                                                    <tr>
+                                                        <td><p>Sub Total</p></td>
+                                                        <td style="text-align:right"><span class="t_subtotal">-</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><p>Discount</p></td>
+                                                        <td style="text-align:right"><span class="t_discount">-</span></td>
+                                                    </tr>  
+                                                    <tr>
+                                                        <td><p>Total</p></td>
+                                                        <td style="text-align:right"><span class="t_total">-</span></td>
+                                                    </tr>                                                                                                       
+                                                </tbody>
+                                            </table>
+                                        </div>
+            
+                                        <div class="col-lg-12 col-md-12">
+                                            <button type="submit" class="default-btn btn-bg-three border-radius-5" {{$remaining_room == 0?'disabled':''}}>
+                                               {{$remaining_room == 0?'Fully Booked':'Book Now'}}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                          
+                        </div>
+                    </div>
+
+                    <div class="col-lg-8">
+                        <div class="room-details-article">
+                            <div class="room-details-slider owl-carousel owl-theme">
+                                @php
+                                $galleryImages = App\Models\MultiImage::where('room_id', $room->id)->get();
+                                @endphp
+
+                                @foreach($galleryImages as $galleryImage)
+                                <div class="room-details-item">
+                                    <img src="{{asset('upload/room/'.$galleryImage->multi_img)}}" alt="Images" width="1000" height="700"/>
+                                </div>
+                                @endforeach
+                            </div>
+
+
+ 
+
+
+                            <div class="room-details-title">
+                                <h2>{{ $room->type->name }}</h2>
+                                <ul>
+                                    
+                                    <li>
+                                       <b> Basic : ${{ $room->price }}/Night/Room</b>
+                                    </li> 
+                                 
+                                </ul>
+                            </div>
+
+                            <div class="room-details-content">
+                                <p>
+                                    {{ $room->description }}
+                                </p>
+
+
+
+
+   <div class="side-bar-plan">
+                                <h3>Basic Plan Facilities</h3>
+                                @php
+                                $facilities = App\Models\Facility::where('room_id', $room->id)->get();
+                                @endphp
+                                <ul>
+                                    @foreach($facilities as $facility)
+                                    <li><a href="#">{{ $facility->facility_name }}</a></li>
+                                    @endforeach
+                                </ul>
+
+                                
+                            </div>
+
+
+
+
+
+
+
+<div class="row"> 
+ <div class="col-lg-6">
+
+
+
+ <div class="services-bar-widget">
+                                <h3 class="title">Download Brochures</h3>
+        <div class="side-bar-list">
+            <ul>
+               <li>
+                    <a href="#"> <b>Capacity : </b> {{ $room->room_capacity }} Person <i class='bx bxs-cloud-download'></i></a>
+                </li>
+                <li>
+                     <a href="#"> <b>Size : </b> {{ $room->size }} <i class='bx bxs-cloud-download'></i></a>
+                </li>
+               
+               
+            </ul>
+        </div>
+    </div>
+
+
+
+
+ </div>
+
+
+
+ <div class="col-lg-6">
+ <div class="services-bar-widget">
+        <h3 class="title">Download Brochures</h3>
+        <div class="side-bar-list">
+            <ul>
+               <li>
+                    <a href="#"> <b>View : </b> {{ $room->view }} <i class='bx bxs-cloud-download'></i></a>
+                </li>
+                <li>
+                     <a href="#"> <b>Bad Style : </b> {{ $room->bed_type }} <i class='bx bxs-cloud-download'></i></a>
+                </li>
+                 
+            </ul>
+        </div>
+    </div> 
+
+                    </div> 
+                        </div>
+
+ 
+
+                            </div>
+
+                            <div class="room-details-review">
+                                <h2>Clients Review and Retting's</h2>
+                                <div class="review-ratting">
+                                    <h3>Your retting: </h3>
+                                    <i class='bx bx-star'></i>
+                                    <i class='bx bx-star'></i>
+                                    <i class='bx bx-star'></i>
+                                    <i class='bx bx-star'></i>
+                                    <i class='bx bx-star'></i>
+                                </div>
+                                <form >
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <textarea name="message" class="form-control"  cols="30" rows="8" required data-error="Write your message" placeholder="Write your review here.... "></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12 col-md-12">
+                                            <button type="submit" class="default-btn btn-bg-three">
+                                                Submit Review
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Room Details Area End -->
+
+        <!-- Room Details Other -->
+        <div class="room-details-other pb-70">
+            <div class="container">
+                <div class="room-details-text">
+                    <h2>Our Related Offer</h2>
+                </div>
+
+                <div class="row ">
+                    @php
+                    $randomRooms = App\Models\Room::where('id', '!=', $id)->inRandomOrder()->take(2)->get();
+                    @endphp
+                    @foreach($randomRooms as $randomRoom)
+                    <div class="col-lg-6">
+                        <div class="room-card-two">
+                            <div class="row align-items-center">
+                                <div class="col-lg-5 col-md-4 p-0">
+                                    <div class="room-card-img">
+                                        <a href="{{ route('show.room', $randomRoom->id) }}">
+                                            <img src="{{asset('upload/room/'.$randomRoom->image)}}" alt="Images">
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-7 col-md-8 p-0">
+                                    <div class="room-card-content">
+                                         <h3>
+                                             <a href="room-details.html">{{ $randomRoom->type->name }}</a>
+                                        </h3>
+                                        <span>{{ $randomRoom->price }} / Per Night </span>
+                                        <div class="rating">
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bxs-star'></i>
+                                        </div>
+                                        <p>{{ $randomRoom->short_desc }}</p>
+                                        <ul>
+                                            <li><i class='bx bx-user'></i> {{ $randomRoom->room_capacity }} Person</li>
+                                            <li><i class='bx bx-expand'></i> {{ $randomRoom->size }}</li>
+                                        </ul>
+
+                                        <ul>
+                                            <li><i class='bx bx-show-alt'></i> {{ $randomRoom->view }}</li>
+                                            <li><i class='bx bxs-hotel'></i> {{ $randomRoom->bed_type }}</li>
+                                        </ul>
+                                        
+                                        <a href="room-details.html" class="book-more-btn">
+                                            Book Now
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+        <!-- Room Details Other End -->
+
+
+<script>
+    $(document).ready(function () {
+       var check_in = "{{ old('check_in') }}";
+       var check_out = "{{ old('check_out') }}";
+       var room_id = "{{ $id }}";
+       if (check_in != '' && check_out != ''){
+          getAvaility(check_in, check_out, room_id);
+       }
+
+
+       $("#check_out").on('change', function () {
+          var check_out = $(this).val();
+          var check_in = $("#check_in").val();
+
+          if(check_in != '' && check_out != ''){
+             getAvaility(check_in, check_out, room_id);
+          }
+       });
+
+       $(".number_of_rooms").on('change', function () {
+          var check_out = $("#check_out").val();
+          var check_in = $("#check_in").val();
+
+          if(check_in != '' && check_out != ''){
+             getAvaility(check_in, check_out, room_id);
+          }
+       });
+
+
+    });
+
+
+
+    function getAvaility(check_in, check_out, room_id) {
+        alert('asdasd');
+       $.ajax({
+          url: "{{ route('check.room.availability') }}",
+          data: {room_id:room_id, check_in:check_in, check_out:check_out},
+          success: function(data){
+            alert(data);
+             $(".available_room").html('Availability : <span class="text-success">'+data['available_room']+' Rooms</span>');
+             $("#available_room").val(data['available_room']);
+             price_calculate(data['total_nights']);
+          }
+       });
+    }
+
+    function price_calculate(total_nights){
+       var room_price = $("#room_price").val();
+       var discount_p = $("#discount_rate").val();
+       var select_room = $("#select_room").val();
+
+       var sub_total = room_price * total_nights * parseInt(select_room);
+
+       var discount_price = (parseInt(discount_p)/100)*sub_total;
+
+       $(".t_subtotal").text(sub_total);
+       $(".t_discount").text(discount_price);
+       $(".t_total").text(sub_total-discount_price);
+
+    }
+
+    $("#bk_form").on('submit', function () {
+       var av_room = $("#available_room").val();
+       var select_room = $("#select_room").val();
+       if (parseInt(select_room) >  av_room){
+          alert('Sorry, you select maximum number of room');
+          return false;
+       }
+       var nmbr_person = $("#person").val();
+       var total_adult = $("#total_adult").val();
+       if(parseInt(nmbr_person) > parseInt(total_adult)){
+          alert('Sorry, you select maximum number of person');
+          return false;
+       }
+
+    })
+ </script>
+
+
+@endsection
