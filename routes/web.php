@@ -9,6 +9,7 @@ use App\Http\Controllers\Backend\BookAreaController;
 use App\Http\Controllers\Backend\RoomTypeController;
 use App\Http\Controllers\Backend\RoomController;
 use App\Http\Controllers\Frontend\FrontEndRoomController;
+use App\Http\Controllers\Frontend\BookingController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -113,4 +114,14 @@ Route::controller(FrontEndRoomController::class)->group(function() {
     Route::get('/bookings', 'BookingSearch')->name('booking.search');
     Route::get('/search/room/details/{id}/{check_in}/{check_out}/{person}', 'SearchedRoomDetails')->name('search.room.details');
     Route::get('/check/room/availability', 'CheckRoomAvailability')->name('check.room.availability');
+});
+
+//Auth middleware
+Route::middleware(['auth'])->group(function() {
+    //Using grouping method to handle the controller and routes
+    Route::controller(BookingController::class)->group(function() {
+        Route::post('/booking/store/{id}', 'StoreUserBooking')->name('user.booking.store');
+        Route::get('/checkout', 'Checkout')->name('checkout');
+        Route::post('/checkout/store', 'StoreCheckout')->name('checkout.store');
+    });
 });

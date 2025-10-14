@@ -34,7 +34,7 @@ return new class extends Migration
             $table->string('state')->nullable();
             $table->string('zip_code')->nullable();
             $table->string('address')->nullable();
-            $table->string('invoice_no')->nullable();
+            $table->string('invoice_no')->nullable();//this is booking id, name should be changed
             $table->integer('status')->default(1);
             $table->timestamps();
         });

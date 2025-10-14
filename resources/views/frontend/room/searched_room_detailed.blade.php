@@ -33,7 +33,7 @@
                         <div class="room-details-side">
                             <div class="side-bar-form">
                                 <h3>Booking Sheet </h3>
-                                <form id="bk_form" action="" method="post">
+                                <form id="bk_form" action="{{ route('user.booking.store', $id) }}" method="post">
                                     @csrf
                                     <input type="hidden" name="room_id" value="{{ $room->id }}"/>
                                     <div class="row align-items-center">
