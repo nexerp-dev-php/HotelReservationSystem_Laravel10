@@ -123,5 +123,6 @@ Route::middleware(['auth'])->group(function() {
         Route::post('/booking/store/{id}', 'StoreUserBooking')->name('user.booking.store');
         Route::get('/checkout', 'Checkout')->name('checkout');
         Route::post('/checkout/store', 'StoreCheckout')->name('checkout.store');
+        Route::match(['get', 'post'],'/stripe_pay', [BookingController::class, 'stripe_pay'])->name('stripe_pay');
     });
 });

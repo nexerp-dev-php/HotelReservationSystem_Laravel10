@@ -11,6 +11,7 @@ use App\Models\RoomBookedDate;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Auth;
+use Stripe;
 
 class BookingController extends Controller
 {
@@ -67,7 +68,7 @@ class BookingController extends Controller
     }
 
     public function StoreCheckout(Request $request) {
-        $this->validate($request, [
+        $request->validate([
             'name' => 'required',
             'email' => 'required',
             'country' => 'required',
@@ -75,7 +76,7 @@ class BookingController extends Controller
             'address' => 'required',
             'state' => 'required',
             'zip_code' => 'required',
-            'payment_method' => 'required'
+            'payment_method_opt' => 'required'
         ]);
 
         $book_data = Session::get('book_date');
@@ -90,6 +91,51 @@ class BookingController extends Controller
         $totalPrice = $subTotal - $discountedAmount;
         $code = rand(000000000, 999999999);
 
+        if($request->payment_method_opt == 'Stripe') {
+            Stripe\Stripe::setApiKey('');
+    $charge = Stripe\Charge::create([
+        'amount' => $totalPrice * 100,
+        'currency' => 'usd',
+        'source' => $request->stripeToken,
+        'description' => 'Hotel booking payment',
+    ]);
+
+            if ($charge->status === 'succeeded' && $charge->paid) {
+                $payment_status = 1;
+                $transaction_id = $charge->id;
+            } else {
+                $notification = array(
+                    'message' => 'Unsuccesful payment.',
+                    'alert-type' => 'error'
+                );
+
+                return redirect('/')->with($notification); 
+            }
+
+            /*Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+            $s_pay = Stripe\Charge::create([
+                "amount" => $totalPrice * 100,
+                "currency" => "usd",
+                "source" => $request->stripeToken,
+                "description" => "Payment for Room Booking. Booking No# ".$code,
+            ]);
+
+            if($s_pay['status'] == 'succeeded') {
+                $payment_status = 1;
+                $transaction_id = $s_pay->id;
+            } else {
+                $notification = array(
+                    'message' => 'Unsuccesful payment.',
+                    'alert-type' => 'error'
+                );
+
+                return redirect('/')->with($notification); 
+            }*/
+        } else {
+            $payment_status = 0;
+            $transaction_id = '';            
+        }
+
         $data = new Booking();
         $data->room_id = $room->id;
         $data->user_id = Auth::user()->id;
@@ -102,9 +148,9 @@ class BookingController extends Controller
         $data->subtotal = $subTotal;
         $data->discount = $discountedAmount;
         $data->total_price = $totalPrice;
-        $data->payment_method = $request->payment_method;
-        $data->transaction_id = '';
-        $data->payment_status = 0;
+        $data->payment_method = $request->payment_method_opt;
+        $data->transaction_id = $transaction_id;
+        $data->payment_status = $payment_status;
         $data->name = $request->name;
         $data->email = $request->email;
         $data->phone = $request->phone;
@@ -138,6 +184,6 @@ class BookingController extends Controller
             'alert-type' => 'success'
         );
 
-        return redirect('/')->with($notification);         
+        return redirect('/')->with($notification);      
     }
 }

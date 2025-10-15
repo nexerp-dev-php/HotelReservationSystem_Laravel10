@@ -1,7 +1,11 @@
 @extends('frontend.main_master')
 @section('main')
 
-
+<script
+  src="https://code.jquery.com/jquery-3.7.1.js"
+  integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+  crossorigin="anonymous"></script>
+<script src="https://js.stripe.com/v3/" crossorigin="anonymous"></script>
         <!-- Inner Banner -->
         <div class="inner-banner inner-bg7">
             <div class="container">
@@ -22,7 +26,7 @@
         <!-- Checkout Area -->
 		<section class="checkout-area pt-100 pb-70">
 			<div class="container">
-				<form action="{{ route('checkout.store') }}" method="post" role="form">
+				<form id="payment-form" role="form" method="post" action="{{ route('checkout.store') }}" class="stripe_form require-validation" data-cc-on-file="false">
                     @csrf
 					<div class="row">
                         <div class="col-lg-8">
@@ -151,16 +155,21 @@
 							<div class="payment-box">
                                 <div class="payment-method">
                                     <p>
-                                        <input type="radio" id="cash-on-delivery" name="payment_method" value="COD">
+                                        <input type="radio" id="cash-on-delivery" name="payment_method_opt" value="COD" checked>
                                         <label for="cash-on-delivery">Cash On Delivery</label>
                                     </p>                                    
-                                    <p>
-                                        <input type="radio" id="stripe" name="payment_method" value="Stripe">
-                                        <label for="stripe">Stripe</label>
-                                    </p>
+         <p>
+       <input type="radio" class="pay_method" id="stripe" name="payment_method_opt" value="Stripe">
+        <label for="stripe">Stripe</label>
+          </p>
+
+
+                                <div id="card-element"></div>
+                                <div id="card-errors" role="alert"></div>
+
                                 </div>
 
-                                <button type="submit" class="order-btn">Place to Order</button>
+                                <button type="submit" class="order-btn" id="myButton">Place to Order</button>
                             </div>
 						</div>
 					</div>
@@ -169,5 +178,53 @@
 		</section>
 		<!-- Checkout Area End -->
 
+    <style>
+            .hide{display:none}
+      </style>
 
+
+<script type="text/javascript">
+      $(document).ready(function () {
+
+            $(".pay_method").on('click', function () {
+                  var payment_method = $(this).val();
+                  if (payment_method == 'Stripe'){
+                        $("#stripe_pay").removeClass('d-none');
+                  }else{
+                        $("#stripe_pay").addClass('d-none');
+                  }
+            });
+
+      });
+</script>
+
+<script>
+  // Initialize Stripe with your publishable key
+  const stripe = Stripe("{{ config('services.stripe.key') }}"); // Laravel Blade example
+  const elements = stripe.elements();
+
+  // Create and mount the card input
+  const card = elements.create('card');
+  card.mount('#card-element');
+
+  // Handle form submission
+  const form = document.getElementById('payment-form');
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const { error, token } = await stripe.createToken(card);
+
+    if (error) {
+      document.getElementById('card-errors').textContent = error.message;
+    } else {
+      // Send token to your server
+      const hiddenInput = document.createElement('input');
+      hiddenInput.type = 'hidden';
+      hiddenInput.name = 'stripeToken';
+      hiddenInput.value = token.id;
+      form.appendChild(hiddenInput);
+      form.submit();
+    }
+  });
+</script>
 @endsection
