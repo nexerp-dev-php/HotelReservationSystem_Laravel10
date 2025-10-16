@@ -92,7 +92,7 @@ class BookingController extends Controller
         $code = rand(000000000, 999999999);
 
         if($request->payment_method_opt == 'Stripe') {
-            Stripe\Stripe::setApiKey('sk_test_51SARr5LvqMbF5wQ52oiQiRdMzerBOp6t8jIQ46I7agqBYZi6t0TnKTXdKmZIecaHpShWzOuU4WHsdA8kSboPNliP00wBSlybvQ');
+            Stripe\Stripe::setApiKey('');
     $charge = Stripe\Charge::create([
         'amount' => $totalPrice * 100,
         'currency' => 'usd',
