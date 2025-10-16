@@ -126,3 +126,11 @@ Route::middleware(['auth'])->group(function() {
         Route::match(['get', 'post'],'/stripe_pay', [BookingController::class, 'stripe_pay'])->name('stripe_pay');
     });
 });
+
+//Admin group middleware
+Route::middleware(['auth', 'roles:admin'])->group(function() {
+    //Using grouping method to handle the controller and routes
+    Route::controller(BookingController::class)->group(function() {
+        Route::get('/all/booking', 'AllBooking')->name('all.booking');
+    });
+});

@@ -186,4 +186,10 @@ class BookingController extends Controller
 
         return redirect('/')->with($notification);      
     }
+
+    public function AllBooking() {
+        $bookings = Booking::orderBy('id', 'desc')->get();
+
+        return view('backend.booking.booking_list', compact('bookings'));
+    }
 }

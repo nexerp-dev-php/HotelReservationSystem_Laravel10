@@ -14,4 +14,12 @@ class Booking extends Model
     public function assign_rooms() {
         return $this->hasMany(BookingRoomList::class, 'booking_id');
     }
+
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function room() {
+        return $this.belongsTo(Room::class, 'room_id');
+    }
 }
