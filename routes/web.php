@@ -132,5 +132,6 @@ Route::middleware(['auth', 'roles:admin'])->group(function() {
     //Using grouping method to handle the controller and routes
     Route::controller(BookingController::class)->group(function() {
         Route::get('/all/booking', 'AllBooking')->name('all.booking');
+        Route::get('/edit/booking/{id}', 'EditBooking')->name('edit.booking');
     });
 });

@@ -40,7 +40,6 @@
 										<th>Customer</th>
 										<th>Room</th>
                                         <th>Check-In/Out</th>
-                                        <th>Check-Out</th>
                                         <th>Total Room</th>
                                         <th>Guest</th>
                                         <th>Payment</th>
@@ -52,7 +51,7 @@
 									@foreach($bookings as $key=> $item)
 									<tr>
 										<td>{{ $key+1 }}</td>
-										<td>{{ $item->code }}</td>
+										<td><a href="{{ route('edit.booking', $item->id) }}">{{ $item->invoice_no }}</a></td>
 										<td>{{ $item->created_at->format('d/m/Y') }}</td>
                                         <td>{{ $item['user']['name'] }}</td>
 										<td>{{ $item['room']['type']['name'] }}</td>

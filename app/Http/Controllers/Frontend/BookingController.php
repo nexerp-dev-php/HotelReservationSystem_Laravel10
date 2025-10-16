@@ -192,4 +192,10 @@ class BookingController extends Controller
 
         return view('backend.booking.booking_list', compact('bookings'));
     }
+
+    public function EditBooking($id) {
+        $booking = Booking::with('room')->findOrFail($id);
+
+        return view('backend.booking.edit_booking', compact('booking'));
+    }
 }
