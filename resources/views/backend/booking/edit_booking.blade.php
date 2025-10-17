@@ -111,55 +111,117 @@
                                                 <td>{{ $booking->room->price }}</td>
                                                 <td>{{ $booking->check_in }} / {{ $booking->check_out }}</td>
                                                 <td>{{ $booking->total_stay }}</td>
-                                                <td>{{ $booking->total_price }}</td>
+                                                <td>{{ $booking->actual_price * $booking->number_of_rooms }}</td>
                                             </tr>                                            
                                         </tbody>
                                     </table>
+
+									<div class="col-md-6" style="float: right;">
+										<style>
+											.test_table td {text-align: right;}
+										</style>
+										<table class="table test_table" style="float: right; border:none;">
+											<tr>
+												<td>Subtotal</td>
+												<td>{{ $booking->subtotal }}</td>
+											</tr>
+											<tr>
+												<td>Discount</td>
+												<td>{{ $booking->discount }}</td>
+											</tr>	
+											<tr>
+												<td>Grand Total</td>
+												<td>{{ $booking->total_price }}</td>
+											</tr>																					
+										</table>
+									</div>
+
                                 </div>
+
+								<form action="">
+									<div class="row" style="margin-top: 40px;">
+										<div class="col-md-5">
+											<label for="payment_status">Payment Status</label>
+                                            <select name="payment_status" class="form-select">
+                                                <option selected="">Select status...</option>
+                                                <option value="0" {{$booking->payment_status == 0?'selected':''}}>Pending</option>
+                                                <option value="1" {{$booking->payment_status == 1?'selected':''}}>Completed</option>
+                                            </select>											
+										</div>
+										<div class="col-md-5">
+											<label for="status">Booking Status</label>
+                                            <select name="status" class="form-select">
+                                                <option selected="">Select status...</option>
+                                                <option value="0" {{$booking->status == 0?'selected':''}}>Pending</option>
+                                                <option value="1" {{$booking->status == 1?'selected':''}}>Completed</option>
+                                            </select>											
+										</div>
+										<div class="col-md-12" style="margin-top:20px;">
+											<button type="submit" class="btn btn-primary">Update</button>
+										</div>										
+									</div>
+								</form>
+
 
 						  </div>
 					  </div>
 				   </div>
-				   <div class="col-12 col-lg-4 d-flex">
+				   <div class="col-12 col-lg-4">
                        <div class="card radius-10 w-100">
 						<div class="card-header">
 							<div class="d-flex align-items-center">
 								<div>
-									<h6 class="mb-0">Trending Products</h6>
-								</div>
-								<div class="dropdown ms-auto">
-									<a class="dropdown-toggle dropdown-toggle-nocaret" href="#" data-bs-toggle="dropdown"><i class='bx bx-dots-horizontal-rounded font-22 text-option'></i>
-									</a>
-									<ul class="dropdown-menu">
-										<li><a class="dropdown-item" href="javascript:;">Action</a>
-										</li>
-										<li><a class="dropdown-item" href="javascript:;">Another action</a>
-										</li>
-										<li>
-											<hr class="dropdown-divider">
-										</li>
-										<li><a class="dropdown-item" href="javascript:;">Something else here</a>
-										</li>
-									</ul>
+									<h6 class="mb-0">Manage Room and Date</h6>
 								</div>
 							</div>
 						</div>
 						   <div class="card-body">
-							<div class="chart-container-2">
-								<canvas id="chart2"></canvas>
-							  </div>
+								<form action="">
+									<div class="row">
+										<div class="col-md-12 mb-2">
+											<label for="">Check-In</label>
+											<input type="date" required name="check_in" class="form-control" value="{{ $booking->check_in }}"/>
+										</div>
+										<div class="col-md-12 mb-2">
+											<label for="">Check-out</label>
+											<input type="date" name="check_out" class="form-control" value="{{ $booking->check_out }}"/>
+										</div>	
+										<div class="col-md-12 mb-2">
+											<label for="">Room</label>
+											<input type="number" name="number_of_rooms" class="form-control" value="{{ $booking->number_of_rooms }}"/>
+										</div>	
+											<div class="col-md-12 mb-2">
+											<label for="">Availability : <span class="text-success availability"></span></label>
+										</div>	
+										<div class="mt-2">
+											<button type="submit" class="btn btn-primary">Update</button>
+										</div>																																					
+									</div>
+								</form>
 						   </div>
-						   <ul class="list-group list-group-flush">
-							<li class="list-group-item d-flex bg-transparent justify-content-between align-items-center border-top">Jeans <span class="badge bg-success rounded-pill">25</span>
-							</li>
-							<li class="list-group-item d-flex bg-transparent justify-content-between align-items-center">T-Shirts <span class="badge bg-danger rounded-pill">10</span>
-							</li>
-							<li class="list-group-item d-flex bg-transparent justify-content-between align-items-center">Shoes <span class="badge bg-primary rounded-pill">65</span>
-							</li>
-							<li class="list-group-item d-flex bg-transparent justify-content-between align-items-center">Lingerie <span class="badge bg-warning text-dark rounded-pill">14</span>
-							</li>
-						</ul>
 					   </div>
+                       <div class="card radius-10 w-100">
+						<div class="card-header">
+							<div class="d-flex align-items-center">
+								<div>
+									<h6 class="mb-0">Customer Information</h6>
+								</div>
+							</div>
+						</div>
+						   <div class="card-body">
+								<form action="">
+									<div class="row">
+										<label for="">Name : {{ $booking->user->name }}</label><br/>
+										<label for="" class="my-2">Email : {{ $booking->user->email }}</label><br/>	
+										<label for="" class="my-2">Phone : {{ $booking->user->phone }}</label><br/>	
+										<label for="" class="my-2">Country : {{ $booking->user->country }}</label><br/>	
+										<label for="" class="my-2">State : {{ $booking->user->state }}</label><br/>
+										<label for="" class="my-2">Zip Code : {{ $booking->user->zip_code }}</label><br/>
+										<label for="" class="my-2">Address : {{ $booking->user->address }}</label><br/>																																
+									</div>
+								</form>
+						   </div>
+					   </div>					   
 				   </div>
 				</div><!--end row-->
 
