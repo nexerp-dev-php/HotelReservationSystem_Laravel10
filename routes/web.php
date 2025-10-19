@@ -147,6 +147,8 @@ Route::middleware(['auth', 'roles:admin'])->group(function() {
     //Using grouping method to handle the controller and routes
     Route::controller(RoomListController::class)->group(function() {
         Route::get('/all/room/list', 'AllRoomList')->name('all.room.list');
+        Route::get('/all/room/booking', 'AddRoomBooking')->name('add.room.booking');
+        Route::post('/add/room/booking', 'StoreRoomBooking')->name('store.room.booking');
     });
 });
 

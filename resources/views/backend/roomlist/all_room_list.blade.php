@@ -19,7 +19,7 @@
 							<button type="button" class="btn btn-primary">Action</button>
 							<button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">	<span class="visually-hidden">Toggle Dropdown</span>
 							</button>
-							<div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">	<a class="dropdown-item" href="{{ route('add.team') }}">Add Booking</a>
+							<div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">	<a class="dropdown-item" href="{{ route('add.room.booking') }}">Add Booking</a>
 								<div class="dropdown-divider"></div>	<a class="dropdown-item" href="javascript:;">Separated link</a>
 							</div>
 						</div>
