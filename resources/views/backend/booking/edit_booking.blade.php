@@ -1,6 +1,11 @@
 @extends('admin.admin_dashboard')
 @section('admin')
 
+<script
+  src="https://code.jquery.com/jquery-3.7.1.js"
+  integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+  crossorigin="anonymous"></script>
+
 <div class="page-content">
 				<div class="row row-cols-1 row-cols-md-2 row-cols-xl-5">
                    <div class="col">
@@ -136,9 +141,44 @@
 										</table>
 									</div>
 
+									<div style="clear:both"></div>
+									<div style="margin-top: 40px; margin-bottom: 20px;">
+										<a href="javascript::void(0)" class="btn btn-primary assign_room">Assign Room</a>
+									</div>
+									@php
+									$assign_rooms = App\Models\BookingRoomList::with('room_number')->where('booking_id', $booking->id)->get();
+									@endphp
+
+									@if(count($assign_rooms) > 0)
+									<table class="table table-bordered">
+										<tr>
+											<th>Room number</th>
+											<th>Action</th>
+										</tr>
+										@foreach($assign_rooms as $assign_room)
+										<tr>
+											<td>{{ $assign_room->room_number->room_no }}</td>
+											<td>
+												<a href="{{ route('delete.assigned.room', $assign_room->id) }}">Delete</a>
+											</td>
+										</tr>
+										@endforeach
+									</table>
+									@else
+									<table class="table table-bordered">
+										<tr>
+											<th>Room number</th>
+											<th>Action</th>
+										</tr>
+										<tr>
+											<td colspan="2">Not room assignment yet.</td>
+										</tr>
+									</table>									
+									@endif
                                 </div>
 
-								<form action="">
+								<form action="{{ route('update.booking.status', $booking->id) }}" method="post">
+									@csrf
 									<div class="row" style="margin-top: 40px;">
 										<div class="col-md-5">
 											<label for="payment_status">Payment Status</label>
@@ -176,24 +216,26 @@
 							</div>
 						</div>
 						   <div class="card-body">
-								<form action="">
+								<form id="bk_form" action="{{ route('update.booking.details', $booking->id) }}" method="post">
+									@csrf
 									<div class="row">
 										<div class="col-md-12 mb-2">
 											<label for="">Check-In</label>
-											<input type="date" required name="check_in" class="form-control" value="{{ $booking->check_in }}"/>
+											<input type="date" required name="check_in" id="check_in" class="form-control" value="{{ $booking->check_in }}"/>
 										</div>
 										<div class="col-md-12 mb-2">
 											<label for="">Check-out</label>
-											<input type="date" name="check_out" class="form-control" value="{{ $booking->check_out }}"/>
+											<input type="date" name="check_out" id="check_out" class="form-control" value="{{ $booking->check_out }}"/>
 										</div>	
 										<div class="col-md-12 mb-2">
 											<label for="">Room</label>
-											<input type="number" name="number_of_rooms" class="form-control" value="{{ $booking->number_of_rooms }}"/>
+											<input type="number" name="number_of_rooms" id="number_of_rooms" class="form-control" value="{{ $booking->number_of_rooms }}"/>
 										</div>	
-											<div class="col-md-12 mb-2">
+											<div class="col-md-12 mb-2">											
 											<label for="">Availability : <span class="text-success availability"></span></label>
 										</div>	
 										<div class="mt-2">
+											<input type="hidden" name="available_room" id="available_room" class="form-control">
 											<button type="submit" class="btn btn-primary">Update</button>
 										</div>																																					
 									</div>
@@ -209,22 +251,73 @@
 							</div>
 						</div>
 						   <div class="card-body">
-								<form action="">
-									<div class="row">
-										<label for="">Name : {{ $booking->user->name }}</label><br/>
-										<label for="" class="my-2">Email : {{ $booking->user->email }}</label><br/>	
-										<label for="" class="my-2">Phone : {{ $booking->user->phone }}</label><br/>	
-										<label for="" class="my-2">Country : {{ $booking->user->country }}</label><br/>	
-										<label for="" class="my-2">State : {{ $booking->user->state }}</label><br/>
-										<label for="" class="my-2">Zip Code : {{ $booking->user->zip_code }}</label><br/>
-										<label for="" class="my-2">Address : {{ $booking->user->address }}</label><br/>																																
-									</div>
-								</form>
+								<div class="row">
+									<label for="">Name : {{ $booking->user->name }}</label><br/>
+									<label for="" class="my-2">Email : {{ $booking->user->email }}</label><br/>	
+									<label for="" class="my-2">Phone : {{ $booking->user->phone }}</label><br/>	
+									<label for="" class="my-2">Country : {{ $booking->user->country }}</label><br/>	
+									<label for="" class="my-2">State : {{ $booking->user->state }}</label><br/>
+									<label for="" class="my-2">Zip Code : {{ $booking->user->zip_code }}</label><br/>
+									<label for="" class="my-2">Address : {{ $booking->user->address }}</label><br/>																																
+								</div>
 						   </div>
 					   </div>					   
 				   </div>
 				</div><!--end row-->
 
 			</div>
+
+
+
+
+
+										<!-- Modal -->
+										<div class="modal fade myModal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+											<div class="modal-dialog">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h5 class="modal-title" id="exampleModalLabel">Rooms</h5>
+														<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+													</div>
+													<div class="modal-body">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur.</div>
+												</div>
+											</div>
+										</div>
+
+
+
+
+<script>
+	$(document).ready(function () {
+
+		function getAvailability() {
+			var check_in = $('#check_in').val();
+			var check_out = $('#check_out').val();
+			var room_id = "{{ $booking->room_id }}";
+
+			$.ajax({
+				url: "{{ route('check.room.availability') }}",
+				data: {room_id:room_id, check_in:check_in, check_out:check_out},
+				success: function(data){
+					$(".availability").html('<span class="text-success">'+data['available_room']+' Rooms</span>');
+					$("#available_room").val(data['available_room']);
+				}
+			});		
+		}
+
+		getAvailability();
+
+		$(".assign_room").on('click', function() {
+			$.ajax({
+				url: "{{ route('assign.room', $booking->id) }}",
+				success: function(data) {
+					$('.myModal .modal-body').html(data);
+					$('.myModal').modal('show');
+				}
+			});
+			return false;
+		});
+    })
+ </script>
 
 @endsection

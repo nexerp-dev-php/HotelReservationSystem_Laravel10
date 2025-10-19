@@ -133,5 +133,10 @@ Route::middleware(['auth', 'roles:admin'])->group(function() {
     Route::controller(BookingController::class)->group(function() {
         Route::get('/all/booking', 'AllBooking')->name('all.booking');
         Route::get('/edit/booking/{id}', 'EditBooking')->name('edit.booking');
+        Route::post('/update/booking/{id}', 'StoreFinalizedBooking')->name('update.booking.status');
+        Route::post('/update/booking/details/{id}', 'StoreUpdatedBookingDetails')->name('update.booking.details');
+        Route::get('/assign/room/{id}', 'AssignRoom')->name('assign.room');
+        Route::get('/assign/room/store/{id}/{room_number_id}', 'StoreAssignRoom')->name('assign.room.store');
+        Route::get('/delete/assigned/room/{id}', 'DeleteAssignedRoom')->name('delete.assigned.room');
     });
 });
