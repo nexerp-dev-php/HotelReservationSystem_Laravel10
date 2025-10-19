@@ -237,6 +237,7 @@
 										<div class="mt-2">
 											<input type="hidden" name="available_room" id="available_room" class="form-control">
 											<button type="submit" class="btn btn-primary">Update</button>
+											<a href="{{ route('download.invoice', $booking->id) }}" class="btn btn-warning">Download Invoice</a>
 										</div>																																					
 									</div>
 								</form>

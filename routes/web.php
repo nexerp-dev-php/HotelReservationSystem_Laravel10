@@ -139,6 +139,7 @@ Route::middleware(['auth', 'roles:admin'])->group(function() {
         Route::get('/assign/room/{id}', 'AssignRoom')->name('assign.room');
         Route::get('/assign/room/store/{id}/{room_number_id}', 'StoreAssignRoom')->name('assign.room.store');
         Route::get('/delete/assigned/room/{id}', 'DeleteAssignedRoom')->name('delete.assigned.room');
+        Route::get('/download/invoice/{id}', 'DownloadInvoice')->name('download.invoice');
     });
 });
 
