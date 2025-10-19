@@ -8,6 +8,7 @@ use App\Http\Controllers\Backend\TeamController;
 use App\Http\Controllers\Backend\BookAreaController;
 use App\Http\Controllers\Backend\RoomTypeController;
 use App\Http\Controllers\Backend\RoomController;
+use App\Http\Controllers\Backend\RoomListController;
 use App\Http\Controllers\Frontend\FrontEndRoomController;
 use App\Http\Controllers\Frontend\BookingController;
 /*
@@ -140,3 +141,13 @@ Route::middleware(['auth', 'roles:admin'])->group(function() {
         Route::get('/delete/assigned/room/{id}', 'DeleteAssignedRoom')->name('delete.assigned.room');
     });
 });
+
+//Admin group middleware
+Route::middleware(['auth', 'roles:admin'])->group(function() {
+    //Using grouping method to handle the controller and routes
+    Route::controller(RoomListController::class)->group(function() {
+        Route::get('/all/room/list', 'AllRoomList')->name('all.room.list');
+    });
+});
+
+
