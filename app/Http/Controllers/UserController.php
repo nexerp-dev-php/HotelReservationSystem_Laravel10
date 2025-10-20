@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Booking;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class UserController extends Controller
 {
@@ -97,5 +99,24 @@ class UserController extends Controller
         );
 
         return back()->with($notification);
-    }     
+    }   
+    
+    public function UserBookingDetails() {
+        $id = Auth::user()->id;
+        $bookings = Booking::where('user_id', $id)->orderBy('id', 'desc')->get();
+        
+        return view('frontend.dashboard.user_booking_details', compact('bookings'));
+    }
+
+    public function UserInvoice($id) {
+        $booking = Booking::with('room')->findOrFail($id);
+
+        $pdf = Pdf::loadView('backend.booking.booking_invoice', compact('booking'))
+                ->setPaper('a4')
+                ->setOption([
+                    'tempDir' => public_path(),
+                    'chroot' => public_path()
+                ]);
+        return $pdf->download('invoice.pdf');     
+    }
 }

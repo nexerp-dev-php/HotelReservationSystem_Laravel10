@@ -38,6 +38,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/user/logout', [UserController::class, 'UserLogout'])->name('user.logout');
     Route::get('/user/change/password', [UserController::class, 'UserChangePassword'])->name('user.change.password');
     Route::post('/change/password/store', [UserController::class, 'ChangePasswordStore'])->name('password.change.store');
+    Route::get('/user/booking/details', [UserController::class, 'UserBookingDetails'])->name('user.booking.details');
+    Route::get('/user/invoice/{id}', [UserController::class, 'UserInvoice'])->name('user.invoice');
 });
 
 require __DIR__.'/auth.php';
@@ -152,5 +154,3 @@ Route::middleware(['auth', 'roles:admin'])->group(function() {
         Route::post('/add/room/booking', 'StoreRoomBooking')->name('store.room.booking');
     });
 });
-
-

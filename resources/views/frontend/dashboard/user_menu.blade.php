@@ -27,7 +27,7 @@
                 <a href="{{ route('user.change.password') }}">Change Password</a>
             </li>
             <li>
-                <a href="#">Booking Details </a>
+                <a href="{{ route('user.booking.details') }}">Booking Details </a>
             </li>
             <li>
                 <a href="{{ route('user.logout') }}">Logout </a>
