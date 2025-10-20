@@ -12,6 +12,7 @@ use App\Http\Controllers\Backend\RoomListController;
 use App\Http\Controllers\Frontend\FrontEndRoomController;
 use App\Http\Controllers\Frontend\BookingController;
 use App\Http\Controllers\Backend\SettingController;
+use App\Http\Controllers\Backend\TestimonialController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -164,3 +165,17 @@ Route::middleware(['auth', 'roles:admin'])->group(function() {
         Route::post('/smtp/setting/store', 'StoreSmtpSetting')->name('smtp.setting.store');
     });
 });
+
+//Admin group middleware
+Route::middleware(['auth', 'roles:admin'])->group(function() {
+    //Using grouping method to handle the controller and routes
+    Route::controller(TestimonialController::class)->group(function() {
+        Route::get('/all/testimonials', 'AllTestimonials')->name('all.testimonials');
+        Route::get('/add/testimonial', 'AddTestimonial')->name('add.testimonial');
+        Route::post('/testimonial/store', 'StoreTestimonial')->name('testimonial.store');
+        Route::get('/edit/testimonial/{id}', 'EditTestimonial')->name('edit.testimonial');
+        Route::get('/delete/testimonial/{id}', 'DeleteTestimonial')->name('delete.testimonial');
+        Route::post('/update/testimonial', 'StoreUpdatedTestimonial')->name('testimonial.update');
+    });
+});
+

@@ -89,7 +89,20 @@
 						<li> <a href="{{ route('smtp.setting') }}"><i class='bx bx-radio-circle'></i>Mail Server</a>
 						</li>
 					</ul>
-				</li>							
+				</li>
+				<li>
+					<a href="javascript:;" class="has-arrow">
+						<div class="parent-icon"><i class="bx bx-category"></i>
+						</div>
+						<div class="menu-title">Testimonial</div>
+					</a>
+					<ul>
+						<li> <a href="{{ route('all.testimonials') }}"><i class='bx bx-radio-circle'></i>All Testimonials</a>
+						</li>
+						<li> <a href="{{ route('add.testimonial') }}"><i class='bx bx-radio-circle'></i>Add Testimonial</a>
+						</li>						
+					</ul>
+				</li>											
 				<li class="menu-label">UI Elements</li>
 				<li>
 					<a href="widgets.html">
