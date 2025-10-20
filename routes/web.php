@@ -11,6 +11,7 @@ use App\Http\Controllers\Backend\RoomController;
 use App\Http\Controllers\Backend\RoomListController;
 use App\Http\Controllers\Frontend\FrontEndRoomController;
 use App\Http\Controllers\Frontend\BookingController;
+use App\Http\Controllers\Backend\SettingController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -152,5 +153,14 @@ Route::middleware(['auth', 'roles:admin'])->group(function() {
         Route::get('/all/room/list', 'AllRoomList')->name('all.room.list');
         Route::get('/all/room/booking', 'AddRoomBooking')->name('add.room.booking');
         Route::post('/add/room/booking', 'StoreRoomBooking')->name('store.room.booking');
+    });
+});
+
+//Admin group middleware
+Route::middleware(['auth', 'roles:admin'])->group(function() {
+    //Using grouping method to handle the controller and routes
+    Route::controller(SettingController::class)->group(function() {
+        Route::get('/smtp/setting', 'SmtpSetting')->name('smtp.setting');
+        Route::post('/smtp/setting/store', 'StoreSmtpSetting')->name('smtp.setting.store');
     });
 });
