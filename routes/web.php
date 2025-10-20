@@ -179,3 +179,11 @@ Route::middleware(['auth', 'roles:admin'])->group(function() {
     });
 });
 
+
+//Admin group middleware
+Route::middleware(['auth', 'roles:admin'])->group(function() {
+    //Using grouping method to handle the controller and routes
+    Route::controller(BookingController::class)->group(function() {
+        Route::post('/mark-notification-as-read/{id}', 'MarkAsRead');
+    });
+});
