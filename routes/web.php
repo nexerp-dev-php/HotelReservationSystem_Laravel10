@@ -13,6 +13,7 @@ use App\Http\Controllers\Frontend\FrontEndRoomController;
 use App\Http\Controllers\Frontend\BookingController;
 use App\Http\Controllers\Backend\SettingController;
 use App\Http\Controllers\Backend\TestimonialController;
+use App\Http\Controllers\Backend\RoleController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -185,5 +186,18 @@ Route::middleware(['auth', 'roles:admin'])->group(function() {
     //Using grouping method to handle the controller and routes
     Route::controller(BookingController::class)->group(function() {
         Route::post('/mark-notification-as-read/{id}', 'MarkAsRead');
+    });
+});
+
+//Admin group middleware
+Route::middleware(['auth', 'roles:admin'])->group(function() {
+    //Using grouping method to handle the controller and routes
+    Route::controller(RoleController::class)->group(function() {
+        Route::get('/all/permission', 'AllPermission')->name('all.permission');
+        Route::get('/add/permission', 'AddPermission')->name('add.permission');
+        Route::post('/permission/store', 'StorePermission')->name('permission.store');
+        Route::get('/delete/permission/{id}', 'DeletePermission')->name('delete.permission');
+        Route::get('/edit/permission/{id}', 'EditPermission')->name('edit.permission');
+        Route::post('/update/permission', 'StoreUpdatedPermission')->name('permission.update.store');
     });
 });
