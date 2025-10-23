@@ -201,3 +201,16 @@ Route::middleware(['auth', 'roles:admin'])->group(function() {
         Route::post('/update/permission', 'StoreUpdatedPermission')->name('permission.update.store');
     });
 });
+
+//Admin group middleware
+Route::middleware(['auth', 'roles:admin'])->group(function() {
+    //Using grouping method to handle the controller and routes
+    Route::controller(RoleController::class)->group(function() {
+        Route::get('/all/role', 'AllRole')->name('all.role');
+        Route::get('/add/role', 'AddRole')->name('add.role');
+        Route::post('/role/store', 'StoreRole')->name('role.store');
+        Route::get('/delete/role/{id}', 'DeleteRole')->name('delete.role');
+        Route::get('/edit/role/{id}', 'EditRole')->name('edit.role');
+        Route::post('/update/role', 'StoreUpdatedRole')->name('role.update.store');
+    });
+});

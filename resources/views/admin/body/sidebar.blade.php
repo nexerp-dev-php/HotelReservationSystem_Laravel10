@@ -111,8 +111,10 @@
 					</a>
 					<ul>
 						<li> <a href="{{ route('all.permission') }}"><i class='bx bx-radio-circle'></i>All Permission</a>
-						</li>						
-					</ul>
+						</li>		
+						<li> <a href="{{ route('all.role') }}"><i class='bx bx-radio-circle'></i>All Role</a>
+							</li>											
+						</ul>
 				</li>															
 				<li class="menu-label">UI Elements</li>
 				<li>

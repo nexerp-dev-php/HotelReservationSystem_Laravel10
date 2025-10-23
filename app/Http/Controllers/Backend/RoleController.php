@@ -79,4 +79,73 @@ class RoleController extends Controller
 
         return redirect()->route('all.permission')->with($notification);    
     }
+
+    public function AllRole() {
+        $roles = Role::latest()->get();
+
+        return view('backend.spatie.role.all_role', compact('roles'));        
+    }
+
+    public function AddRole() {
+        return view('backend.spatie.role.add_role');
+    }
+
+    public function StoreRole(Request $request) {
+        Role::insert([
+            'name' => $request->name,
+            "guard_name" => "web",
+            'created_at' => Carbon::now()
+        ]);
+
+        $notification = array(
+            'message' => 'Role created Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->route('all.role')->with($notification);
+    }
+
+    public function DeleteRole($id) {
+        $role = Role::find($id);
+
+        if (!$role) {
+            return redirect()->back()->with([
+                'message' => 'Role not found',
+                'alert-type' => 'error'
+            ]);
+        }
+
+        try {
+            $role->delete();
+        } catch(\Exception $e) {
+            dd($e->getTraceAsString());
+        }
+        return redirect()->back()->with([
+            'message' => 'Role deleted successfully',
+            'alert-type' => 'success'
+        ]);  
+    }
+
+    public function EditRole($id) {
+        $role = Role::findOrFail($id);
+
+        return view('backend.spatie.role.edit_role', compact('role')); 
+    }
+
+    public function StoreUpdatedRole(Request $request) {
+        $id = $request->id;
+        
+        Role::findOrFail($id)->update([
+            'name' => $request->name,
+            "guard_name" => "web",
+            'updated_at' => Carbon::now()                
+        ]);
+
+        $notification = array(
+            'message' => 'Role updated Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->route('all.role')->with($notification);
+    }
 }
