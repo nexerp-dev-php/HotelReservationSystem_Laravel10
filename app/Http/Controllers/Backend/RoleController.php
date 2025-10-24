@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Carbon\Carbon;
+use App\Models\User;
+use DB;
 
 class RoleController extends Controller
 {
@@ -147,5 +149,84 @@ class RoleController extends Controller
         );
 
         return redirect()->route('all.role')->with($notification);
+    }
+
+    public function AddPermissionRole() {
+        $roles = Role::all();
+        $permission = Permission::all();
+        $permission_groups = User::getPermissionGroups();
+        return view('backend.spatie.assignment.add_permission_role', compact('roles', 'permission', 'permission_groups'));
+    }
+
+    public function StorePermissionRole(Request $request) {
+        $data = array();
+        $permissions = $request->permission;
+
+        foreach($permissions as $key => $item) {
+            $data['role_id'] = $request->role;
+            $data['permission_id'] = $item;
+
+            DB::table('role_has_permissions')->insert($data);
+        }
+
+        $notification = array(
+            'message' => 'Role Permission created Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->route('all.permission.role')->with($notification);        
+    }
+
+    public function AllPermissionRole() {
+        $roles = Role::all();
+
+        return view('backend.spatie.assignment.all_permission_role', compact('roles'));
+    }
+
+    public function EditPermissionRole($id) {
+        $role = Role::find($id);
+        $permission_groups = User::getPermissionGroups();
+        $assigned_permissions = DB::table('role_has_permissions')
+            ->select('permission_id')
+            ->where('role_id', $id)
+            ->get();
+
+        return view('backend.spatie.assignment.edit_permission_role', compact('role', 'assigned_permissions', 'permission_groups'));
+    }
+
+    public function StoreUpdatedPermissionRole(Request $request) {
+        $data = array();
+        $permissions = $request->permission;
+
+        DB::table('role_has_permissions')
+            ->where('role_id', $request->role)
+            ->delete();
+
+        foreach($permissions as $key => $item) {
+            $data['role_id'] = $request->role;
+            $data['permission_id'] = $item;
+
+            DB::table('role_has_permissions')->insert($data);
+        }
+
+        $notification = array(
+            'message' => 'Role Permission updated Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->route('all.permission.role')->with($notification); 
+    }
+
+    public function DeletePermissionRole($id) {
+        DB::table('role_has_permissions')
+            ->where('role_id', $id)
+            ->delete();
+
+        $notification = array(
+            'message' => 'Role Permission deleted Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->route('all.permission.role')->with($notification); 
     }
 }
