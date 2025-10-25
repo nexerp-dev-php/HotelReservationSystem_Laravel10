@@ -9,6 +9,7 @@ use Spatie\Permission\Models\Permission;
 use Carbon\Carbon;
 use App\Models\User;
 use DB;
+use Spatie\Permission\PermissionRegistrar;
 
 class RoleController extends Controller
 {
@@ -169,6 +170,9 @@ class RoleController extends Controller
             DB::table('role_has_permissions')->insert($data);
         }
 
+        // Reset cached roles and permissions
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
+
         $notification = array(
             'message' => 'Role Permission created Successfully',
             'alert-type' => 'success'
@@ -209,6 +213,9 @@ class RoleController extends Controller
             DB::table('role_has_permissions')->insert($data);
         }
 
+        // Reset cached roles and permissions
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
+
         $notification = array(
             'message' => 'Role Permission updated Successfully',
             'alert-type' => 'success'
@@ -221,6 +228,9 @@ class RoleController extends Controller
         DB::table('role_has_permissions')
             ->where('role_id', $id)
             ->delete();
+
+        // Reset cached roles and permissions
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         $notification = array(
             'message' => 'Role Permission deleted Successfully',

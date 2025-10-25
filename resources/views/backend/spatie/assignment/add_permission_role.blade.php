@@ -48,8 +48,7 @@
 											<div class="row">
 												<div class="col-3">
 													<div class="form-group col-sm-12 text-secondary">
-														<input class="form-check-input mb-3" type="checkbox" value="{{ $group->group_name }}" name="permissiongroup[]" id="permissiongroup{{ $group->group_name }}">
-														<label class="form-check-label mb-3" for="permissiongroup{{ $group->group_name }}">{{ $group->group_name }}</label>
+														<label class="form-check-label mb-3">{{ $group->group_name }}</label>
 													</div>
 												</div>
 												<div class="col-9">

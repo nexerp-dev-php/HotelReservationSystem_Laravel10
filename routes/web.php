@@ -63,8 +63,8 @@ Route::get('/admin/login', [AdminController::class, 'AdminLogin'])->name('admin.
 Route::middleware(['auth', 'roles:admin'])->group(function() {
     //Using grouping method to handle the controller and routes
     Route::controller(TeamController::class)->group(function() {
-        Route::get('/all/team', 'AllTeam')->name('all.team');
-        Route::get('/add/team', 'AddTeam')->name('add.team');
+        Route::get('/all/team', 'AllTeam')->name('all.team')->middleware('permission:team.all');
+        Route::get('/add/team', 'AddTeam')->name('add.team')->middleware('permission:team.add');
         Route::post('/team/store', 'StoreTeam')->name('team.store');
         Route::get('/edit/team/{id}', 'EditTeam')->name('edit.team');
         Route::post('/team/update/store', 'StoreUpdatedTeam')->name('team.update.store');
