@@ -117,7 +117,20 @@
 						<li> <a href="{{ route('all.permission.role') }}"><i class='bx bx-radio-circle'></i>All Permission Role</a>
 						</li>																	
 					</ul>						
-				</li>															
+				</li>	
+				<li>
+					<a href="javascript:;" class="has-arrow">
+						<div class="parent-icon"><i class="bx bx-category"></i>
+						</div>
+						<div class="menu-title">Manage Admin User</div>
+					</a>
+					<ul>
+						<li> <a href="{{ route('all.admin.user') }}"><i class='bx bx-radio-circle'></i>All Admin</a>
+						</li>		
+						<li> <a href="{{ route('add.admin.user') }}"><i class='bx bx-radio-circle'></i>Add Admin</a>
+						</li>																
+					</ul>						
+				</li>																		
 				<li class="menu-label">UI Elements</li>
 				<li>
 					<a href="widgets.html">

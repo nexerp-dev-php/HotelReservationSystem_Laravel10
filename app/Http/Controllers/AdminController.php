@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {
@@ -96,5 +99,82 @@ class AdminController extends Controller
         );
 
         return back()->with($notification);
-    }    
+    }  
+    
+    public function AllAdminUser() {
+        $allAdmin = User::where('role', 'admin')->get();
+
+        return view('backend.user.all_admin', compact('allAdmin'));
+    }
+
+    public function AddAdminUser() {
+        $roles = Role::all();
+        return view('backend.user.add_admin', compact('roles'));
+    }
+
+    public function StoreAdminUser(Request $request) {
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->address = $request->address;
+        $user->password = Hash::make($request->password);
+        $user->role = 'admin';
+        $user->status = 'active';
+        $user->created_at = Carbon::now();
+        $user->save();
+
+        if($request->role) {
+            $user->assignRole($request->role);
+        }
+
+        $notification = array(
+            'message' => 'Admin user created successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->route('all.admin.user')->with($notification);
+    }
+
+    public function EditAdminUser($id) {
+        $user = User::find($id);
+        $roles = Role::all();
+
+        return view('backend.user.edit_admin', compact('roles', 'user'));
+    }
+
+    public function StoreUpdatedAdminUser(Request $request) {
+        $user = User::find($request->id);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->address = $request->address;
+        $user->role = 'admin';
+        $user->status = 'active';
+        $user->created_at = Carbon::now();
+        $user->save();
+
+        $user->roles()->detach();
+        if($request->role) {
+            $user->assignRole($request->role);
+        }
+
+        $notification = array(
+            'message' => 'Admin user updated successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->route('all.admin.user')->with($notification);
+    }
+
+    public function DeleteAdminUser($id) {
+        User::find($id)->delete();
+
+        $notification = array(
+            'message' => 'Admin user deleted successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->route('all.admin.user')->with($notification);
+    }
 }

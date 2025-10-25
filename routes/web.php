@@ -227,3 +227,16 @@ Route::middleware(['auth', 'roles:admin'])->group(function() {
         Route::get('/delete/permission/role/{id}', 'DeletePermissionRole')->name('delete.permission.role');
     });
 });
+
+//Admin group middleware
+Route::middleware(['auth', 'roles:admin'])->group(function() {
+    //Using grouping method to handle the controller and routes
+    Route::controller(AdminController::class)->group(function() {
+        Route::get('/all/admin/user', 'AllAdminUser')->name('all.admin.user');
+        Route::get('/add/admin/user', 'AddAdminUser')->name('add.admin.user');
+        Route::post('/admin/user/store', 'StoreAdminUser')->name('admin.user.store');
+        Route::get('/edit/admin/user/{id}', 'EditAdminUser')->name('edit.admin.user');
+        Route::post('/update/admin/user', 'StoreUpdatedAdminUser')->name('admin.user.update');
+        Route::get('/delete/admin/user/{id}', 'DeleteAdminUser')->name('delete.admin.user');
+    });
+});
