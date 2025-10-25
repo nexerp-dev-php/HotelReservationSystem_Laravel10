@@ -124,7 +124,11 @@
 						<li> <a href="{{ route('all.role') }}"><i class='bx bx-radio-circle'></i>All Role</a>
 						</li>											
 						<li> <a href="{{ route('all.permission.role') }}"><i class='bx bx-radio-circle'></i>All Permission Role</a>
-						</li>																	
+						</li>
+						<li> <a href="{{ route('import.permission') }}"><i class='bx bx-radio-circle'></i>Import</a>
+						</li>	
+						<li> <a href="{{ route('export.permission') }}"><i class='bx bx-radio-circle'></i>Export</a>
+						</li>																												
 					</ul>						
 				</li>	
 				<li>

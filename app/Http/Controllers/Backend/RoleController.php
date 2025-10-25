@@ -10,6 +10,9 @@ use Carbon\Carbon;
 use App\Models\User;
 use DB;
 use Spatie\Permission\PermissionRegistrar;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\PermissionExport;
+use App\Imports\PermissionImport;
 
 class RoleController extends Controller
 {
@@ -238,5 +241,24 @@ class RoleController extends Controller
         );
 
         return redirect()->route('all.permission.role')->with($notification); 
+    }
+
+    public function ImportPermission() {
+        return view('backend.spatie.permission.import_permission');
+    }
+
+    public function StoreImportedPermission(Request $request) {
+        Excel::import(new PermissionImport, $request->file('import_file'));
+
+        $notification = array(
+            'message' => 'Permission imported Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->back()->with($notification);         
+    }
+
+    public function ExportPermission() {
+        return Excel::download(new PermissionExport, 'permissions.csv');
     }
 }
